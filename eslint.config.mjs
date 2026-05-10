@@ -1,16 +1,10 @@
-/**
- * THIS FILE WAS AUTO-GENERATED.
- * PLEASE DO NOT EDIT IT MANUALLY.
- * ===============================
- * IF YOU COPY THIS INTO AN ESLINT CONFIG, REMOVE THIS COMMENT BLOCK.
- */
-
 import path from 'node:path';
 
 import { includeIgnoreFile } from '@eslint/compat';
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import { configs, plugins } from 'eslint-config-airbnb-extended';
+import jestPlugin from 'eslint-plugin-jest';
 
 const gitignorePath = path.resolve('.', '.gitignore');
 
@@ -42,4 +36,20 @@ export default defineConfig([
   ...jsConfig,
   // Node config
   ...nodeConfig,
+  {
+    files: ['src/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+  },
+  {
+    files: ['**/*.test.js'],
+    ...jestPlugin.configs['flat/recommended'],
+    languageOptions: {
+      ...jestPlugin.configs['flat/recommended'].languageOptions,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+  },
 ]);

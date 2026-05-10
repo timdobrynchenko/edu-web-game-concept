@@ -14,12 +14,26 @@
   },
   "license": "ISC",
   "author": "timdobry",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d dist",
-    "lint": "eslint ."
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "build": "webpack",
+    "dev": "webpack serve --open",
+    "start": "http-server dist",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "jest": {
+  "transform": {
+    "^.+\\.js$": ["babel-jest", {
+      "presets": [["@babel/preset-env", { "targets": { "node": "current" } }]],
+      "babelrc": false,
+      "configFile": false
+    }]
+  },
+  "testEnvironment": "node",
+  "collectCoverageFrom": ["src/js/weapons/**/*.js", "!**/*.test.js"]
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
@@ -27,8 +41,19 @@
     "@babel/preset-env": "^7.29.5",
     "@eslint/compat": "^2.1.0",
     "@eslint/js": "^9.39.4",
+    "babel-jest": "^30.4.1",
+    "babel-loader": "^10.1.1",
+    "css-loader": "^7.1.4",
     "eslint": "^9.39.4",
-    "eslint-config-airbnb-extended": "^3.1.0"
+    "eslint-config-airbnb-extended": "^3.1.0",
+    "eslint-plugin-jest": "^29.15.2",
+    "html-webpack-plugin": "^5.6.7",
+    "http-server": "^14.1.1",
+    "jest": "^30.4.2",
+    "mini-css-extract-plugin": "^2.10.2",
+    "webpack": "^5.106.2",
+    "webpack-cli": "^7.0.2",
+    "webpack-dev-server": "^5.2.3"
   },
   "dependencies": {
     "core-js": "^3.49.0"
