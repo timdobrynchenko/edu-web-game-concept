@@ -1,0 +1,36 @@
+{
+  "name": "rpg-game",
+  "version": "1.0.0",
+  "description": "a simple web rpg game concept for edu purposes",
+  "keywords": [
+    "game",
+    "rpg",
+    "edu",
+    "javascript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timdobrynchenko/edu-web-game-concept"
+  },
+  "license": "ISC",
+  "author": "timdobry",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d dist",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
+    "@eslint/compat": "^2.1.0",
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "eslint-config-airbnb-extended": "^3.1.0"
+  },
+  "dependencies": {
+    "core-js": "^3.49.0"
+  }
+}
