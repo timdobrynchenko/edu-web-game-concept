@@ -5,6 +5,21 @@
   <title>RPG Game</title>
 </head>
 <body>
-  <h1>RPG Game</h1>
+  <header>
+    <h1>RPG Game</h1>
+    <div id="round-indicator">Подготовка к бою...</div>
+    <button id="restart-btn" type="button">🔄 Рестарт</button>
+  </header>
+
+  <main>
+    <section id="battlefield" aria-label="Поле боя">
+      <!-- сюда renderer вставит карточки игроков -->
+    </section>
+
+    <section id="log-panel" aria-label="Журнал боя">
+      <h2>Журнал</h2>
+      <div id="log-entries"></div>
+    </section>
+  </main>
 </body>
 </html>
