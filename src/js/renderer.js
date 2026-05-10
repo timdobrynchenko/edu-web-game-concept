@@ -1,5 +1,7 @@
-const POSITION_SCALE = 90;
 const TURN_DELAY = 600;
+const CARD_WIDTH = 100;
+const FIELD_PADDING = 32;
+const STACK_OFFSET_Y = 8;
 
 const AVATAR_COLORS = {
   Воин: '#c44569',
@@ -59,7 +61,6 @@ export default function createRenderer(players) {
 
   players.forEach((p) => {
     const card = createCard(p, maxLifeMap.get(p));
-    card.style.transform = `translateX(${p.position * POSITION_SCALE}px)`;
     battlefield.appendChild(card);
     cardMap.set(p, card);
   });
@@ -78,16 +79,42 @@ export default function createRenderer(players) {
     logEntries.scrollTop = logEntries.scrollHeight;
   };
 
-  function updateCard(p) {
-    const card = cardMap.get(p);
-    if (!card) return;
-    const maxLife = maxLifeMap.get(p);
-    card.style.transform = `translateX(${p.position * POSITION_SCALE}px)`;
-    card.querySelector('.weapon').textContent = `⚔ ${p.weapon.name}`;
-    card.querySelector('.fill').style.width = `${(p.life / maxLife) * 100}%`;
-    card.querySelector('.hp-value').textContent = `${p.life.toFixed(0)}/${maxLife}`;
-    if (p.isDead()) card.classList.add('dead');
+  function calculateXPositions() {
+    const fieldWidth = battlefield.clientWidth;
+    const usable = Math.max(100, fieldWidth - CARD_WIDTH - FIELD_PADDING * 2);
+    const positions = players.map((p) => p.position);
+    const minPos = Math.min(...positions);
+    const maxPos = Math.max(...positions);
+    const range = maxPos - minPos;
+
+    return new Map(players.map((p) => {
+      let x;
+      if (range === 0) {
+        x = usable / 2;
+      } else {
+        x = ((p.position - minPos) / range) * usable;
+      }
+      return [p, FIELD_PADDING + x];
+    }));
   }
+
+  function updateAllCards() {
+    const xMap = calculateXPositions();
+    players.forEach((p, idx) => {
+      const card = cardMap.get(p);
+      if (!card) return;
+      const maxLife = maxLifeMap.get(p);
+      const x = xMap.get(p);
+      const y = idx * STACK_OFFSET_Y;
+      card.style.transform = `translate(${x}px, ${-y}px)`;
+      card.querySelector('.weapon').textContent = `⚔ ${p.weapon.name}`;
+      card.querySelector('.fill').style.width = `${(p.life / maxLife) * 100}%`;
+      card.querySelector('.hp-value').textContent = `${p.life.toFixed(0)}/${maxLife}`;
+      if (p.isDead()) card.classList.add('dead');
+    });
+  }
+
+  updateAllCards();
 
   return {
     setRound(n) {
@@ -96,7 +123,7 @@ export default function createRenderer(players) {
     },
     async afterTurn() {
       if (cancelled) return false;
-      players.forEach(updateCard);
+      updateAllCards();
       await sleep(TURN_DELAY);
       return !cancelled;
     },
